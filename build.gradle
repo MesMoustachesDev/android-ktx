@@ -61,6 +61,7 @@ dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib:${versions.kotlin}"
     implementation "androidx.annotation:annotation:${versions.androidx}"
     implementation "androidx.core:core:${versions.androidx}"
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     api 'androidx.recyclerview:recyclerview:1.0.0'
 
 
