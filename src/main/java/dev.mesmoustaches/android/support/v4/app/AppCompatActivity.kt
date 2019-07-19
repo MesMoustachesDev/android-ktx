@@ -1,10 +1,9 @@
-package android.support.v4.app
+package dev.mesmoustaches.android.support.v4.app
 
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.casino.fidelite.uicore.R
 
 fun AppCompatActivity.hideKeyBoard() {
     val viewFocused = currentFocus ?: View(this)
@@ -12,9 +11,9 @@ fun AppCompatActivity.hideKeyBoard() {
     imm.hideSoftInputFromWindow(viewFocused.windowToken, 0)
 }
 
-fun AppCompatActivity.exitModalWay() {
-    overridePendingTransition(R.anim.nothing, R.anim.slide_out_bottom)
-}
+//fun AppCompatActivity.exitModalWay() {
+//    overridePendingTransition(R.anim.nothing, R.anim.slide_out_bottom)
+//}
 
 fun Fragment.hideKeyBoard() {
     val viewFocused = activity?.currentFocus ?: View(requireContext())

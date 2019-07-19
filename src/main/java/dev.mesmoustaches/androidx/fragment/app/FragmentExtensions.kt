@@ -1,13 +1,8 @@
 package androidx.fragment.app
 
 import android.view.View
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelStoreOwner
-import org.koin.android.viewmodel.ext.android.ViewModelStoreOwnerDefinition
-import org.koin.android.viewmodel.ext.android.viewModelByClass
-import org.koin.core.parameter.ParameterDefinition
 
-inline fun androidx.fragment.app.FragmentManager.fragmentTransaction(transaction: androidx.fragment.app.FragmentTransaction.() -> Unit) {
+inline fun FragmentManager.fragmentTransaction(transaction: FragmentTransaction.() -> Unit) {
     val fragmentTransaction = beginTransaction()
     fragmentTransaction.transaction()
     fragmentTransaction.commit()
@@ -27,21 +22,21 @@ fun Fragment.getStatusBarHeight(): Int {
     return result
 }
 
-inline fun <reified T : ViewModel> Fragment.parentViewModel(
-        key: String? = null,
-        name: String? = null,
-        noinline from: ViewModelStoreOwnerDefinition = { (parentFragment ?: activity) as ViewModelStoreOwner },
-        noinline parameters: ParameterDefinition = org.koin.core.parameter.emptyParameterDefinition()
-) = viewModelByClass(T::class, key, name, from, parameters)
-
-inline fun <reified T : ViewModel> Fragment.rootFragmentViewModel(
-        key: String? = null,
-        name: String? = null,
-        noinline from: ViewModelStoreOwnerDefinition = {
-            var parent:Fragment? = this
-            while (parent?.parentFragment != null) parent = parent?.parentFragment
-
-            parent as ViewModelStoreOwner
-        },
-        noinline parameters: ParameterDefinition = org.koin.core.parameter.emptyParameterDefinition()
-) = viewModelByClass(T::class, key, name, from, parameters)
+//inline fun <reified T : ViewModel> Fragment.parentViewModel(
+//        key: String? = null,
+//        name: String? = null,
+//        noinline from: ViewModelStoreOwnerDefinition = { (parentFragment ?: activity) as ViewModelStoreOwner },
+//        noinline parameters: ParameterDefinition = org.koin.core.parameter.emptyParameterDefinition()
+//) = viewModelByClass(T::class, key, name, from, parameters)
+//
+//inline fun <reified T : ViewModel> Fragment.rootFragmentViewModel(
+//        key: String? = null,
+//        name: String? = null,
+//        noinline from: ViewModelStoreOwnerDefinition = {
+//            var parent:Fragment? = this
+//            while (parent?.parentFragment != null) parent = parent?.parentFragment
+//
+//            parent as ViewModelStoreOwner
+//        },
+//        noinline parameters: ParameterDefinition = org.koin.core.parameter.emptyParameterDefinition()
+//) = viewModelByClass(T::class, key, name, from, parameters)

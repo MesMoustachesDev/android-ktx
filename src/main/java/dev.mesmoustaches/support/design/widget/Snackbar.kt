@@ -2,7 +2,7 @@ package support.design.widget
 
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import com.casino.fidelite.uicore.R
+import androidx.core.ktx.R
 import com.google.android.material.snackbar.Snackbar
 
 fun Snackbar.setTextColor(color: Int): Snackbar {
