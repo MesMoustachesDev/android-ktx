@@ -41,7 +41,10 @@ fun <T> LiveData<T>.nullableObserve(lifecycleOwner: LifecycleOwner, action: (t: 
     })
 }
 
-fun <T> LiveData<T>.nonNullObserveWithContext(fragment: Fragment, action: (t: T, context: Context) -> Unit) {
+fun <T> LiveData<T>.nonNullObserveWithContext(
+    fragment: Fragment,
+    action: (t: T, context: Context) -> Unit
+) {
     this.observe(fragment, Observer<T> {
         it?.let {
             fragment.context?.let { cont ->
@@ -73,23 +76,30 @@ fun <T> LiveData<T>.nonNullObserveOnce(owner: LifecycleOwner, observer: (t: T) -
 }
 
 fun <S, R> LiveData<S>.map(valueWhenNull: R? = null, mapAction: S.() -> R?): LiveData<R> =
-        Transformations.map(this) {
+    Transformations.map(this) {
+        it?.let { eltSource ->
+            eltSource.mapAction()
+        } ?: valueWhenNull
+    }
+
+fun <S, R> LiveData<S>.mapNotResendingSameValue(
+    valueWhenNull: R? = null,
+    mapAction: S.() -> R
+): LiveData<R> =
+    MediatorStateLiveData<R>().apply {
+        addSource(this@mapNotResendingSameValue) {
             it?.let { eltSource ->
-                eltSource.mapAction()
-            } ?: valueWhenNull
+                postValue(eltSource.mapAction())
+            } ?: postValue(valueWhenNull)
         }
-
-fun <S, R> LiveData<S>.mapNotResendingSameValue(valueWhenNull: R? = null, mapAction: S.() -> R): LiveData<R> =
-        MediatorStateLiveData<R>().apply {
-            addSource(this@mapNotResendingSameValue) {
-                it?.let { eltSource ->
-                    postValue(eltSource.mapAction())
-                } ?: postValue(valueWhenNull)
-            }
-        }
+    }
 
 
-fun <T, U, W> combineLatestNonNull(liveData1: LiveData<T>, liveData2: LiveData<U>, map: ((t: T, u: U) -> W?)): MutableLiveData<W> {
+fun <T, U, W> combineLatestNonNull(
+    liveData1: LiveData<T>,
+    liveData2: LiveData<U>,
+    map: ((t: T, u: U) -> W?)
+): MutableLiveData<W> {
     return MediatorLiveData<W>().apply {
         fun emitIfCan() {
             val val1 = liveData1.value
@@ -111,7 +121,12 @@ fun <T, U, W> combineLatestNonNull(liveData1: LiveData<T>, liveData2: LiveData<U
 
 }
 
-fun <T, U, V, W> combineLatestNonNull(liveData1: LiveData<T>, liveData2: LiveData<U>, liveData3: LiveData<V>, map: ((t: T, u: U, v: V) -> W?)): MutableLiveData<W> {
+fun <T, U, V, W> combineLatestNonNull(
+    liveData1: LiveData<T>,
+    liveData2: LiveData<U>,
+    liveData3: LiveData<V>,
+    map: ((t: T, u: U, v: V) -> W?)
+): MutableLiveData<W> {
     return MediatorLiveData<W>().apply {
         fun emitIfCan() {
             val val1 = liveData1.value
@@ -135,5 +150,27 @@ fun <T, U, V, W> combineLatestNonNull(liveData1: LiveData<T>, liveData2: LiveDat
             emitIfCan()
         }
     }
+}
 
+
+fun <T : Any, L : LiveData<T>> LifecycleOwner.observe(liveData: L, body: (T?) -> Unit) {
+    liveData.observe(this, Observer(body))
+}
+
+fun <T : Any, L : LiveData<T>> LifecycleOwner.nonNullObserve(liveData: L, body: (T) -> Unit) {
+    liveData.observe(this, Observer {
+        it?.let { t -> body.invoke(t) }
+    })
+}
+
+fun <T : Any, L : LiveData<T>> LifecycleOwner.nonNullObserveConsume(
+    liveData: L,
+    body: (T) -> Unit
+) {
+    liveData.observe(this, Observer {
+        it?.let { t ->
+            body.invoke(t)
+            liveData.value = null
+        }
+    })
 }
