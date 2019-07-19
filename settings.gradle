@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-rootProject.name = 'core-ktx'
+rootProject.name = 'dev.mesmoustaches-ktx'
