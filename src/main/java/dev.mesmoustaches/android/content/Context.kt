@@ -16,7 +16,7 @@ import support.design.widget.setTextColor
 fun Context.showSnackBar(resText: Int,
     mainRoot: View,
     duration: Int = Snackbar.LENGTH_LONG,
-    backgroundColor: Int? = R.color.design_default_color_secondary,
+    backgroundColor: Int? = R.color.design_default_color_primary,
     textColor: Int? = R.color.design_default_color_primary,
     anchor: Int? = null) {
     showSnackBar(getString(resText), mainRoot, duration, backgroundColor, textColor, anchor)
@@ -25,7 +25,7 @@ fun Context.showSnackBar(resText: Int,
 fun Context.showSnackBar(message: String,
                          mainRoot: View,
                          duration: Int = Snackbar.LENGTH_LONG,
-                         backgroundColor: Int? = R.color.design_default_color_secondary,
+                         backgroundColor: Int? = R.color.design_default_color_primary,
                          textColor: Int? = R.color.design_default_color_primary,
                          anchor: Int? = null,
                          argGravity: Int = Gravity.TOP) {
